@@ -1,0 +1,554 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.props')" />
+  <Import Project="..\packages\chromiumembeddedframework.runtime.win-x86.135.0.22\build\chromiumembeddedframework.runtime.win-x86.props" Condition="Exists('..\packages\chromiumembeddedframework.runtime.win-x86.135.0.22\build\chromiumembeddedframework.runtime.win-x86.props')" />
+  <Import Project="..\packages\chromiumembeddedframework.runtime.win-x64.135.0.22\build\chromiumembeddedframework.runtime.win-x64.props" Condition="Exists('..\packages\chromiumembeddedframework.runtime.win-x64.135.0.22\build\chromiumembeddedframework.runtime.win-x64.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{30E3824B-F04C-4C10-8AC2-BD59245A8369}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SigortaVipNew</RootNamespace>
+    <AssemblyName>SigortaVipNew</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="CefSharp, Version=135.0.220.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Common.135.0.220\lib\net462\CefSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.Core, Version=135.0.220.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.Common.135.0.220\lib\net462\CefSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.WinForms, Version=135.0.220.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
+      <HintPath>..\packages\CefSharp.WinForms.135.0.220\lib\net462\CefSharp.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.Desktop.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Drawing.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Images.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v23.2.Core, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGrid.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraNavBar.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="Emgu.CV, Version=4.10.0.5680, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
+      <HintPath>..\packages\Emgu.CV.4.10.0.5680\lib\netstandard2.0\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Eto.Forms.2.8.3\lib\netstandard2.0\Eto.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.6, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.6\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=9.0.0.6, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.6\lib\net462\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=9.0.0.6, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.9.0.6\lib\net462\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=9.0.0.6, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.9.0.6\lib\net462\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=3.14.0.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.3.14.0\lib\net472\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=112.1.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.112.1.0\lib\net48\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Primitives.4.3.0\lib\net45\System.Drawing.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.5\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.5\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.9.0.5\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="zxing, Version=0.16.10.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.10\lib\net48\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXing.EmguCV, Version=0.16.5.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.Bindings.EmguCV.0.16.5\lib\netstandard2.0\ZXing.EmguCV.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXing.Eto.Forms, Version=0.16.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.Bindings.Eto.Forms.0.16.5\lib\netstandard2.0\ZXing.Eto.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.10.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.10\lib\net48\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Api\AracSorguApiService.cs" />
+    <Compile Include="Api\AuthApiService.cs" />
+    <Compile Include="Api\BaseApiService.cs" />
+    <Compile Include="Api\CookieApiService.cs" />
+    <Compile Include="Api\InsuranceCompanyService.cs" />
+    <Compile Include="Business\AesOperation.cs" />
+    <Compile Include="Business\Browser.cs" />
+    <Compile Include="Business\BrowserManager.cs" />
+    <Compile Include="Business\CookieManager.cs" />
+    <Compile Include="Business\ProgressReportModel.cs" />
+    <Compile Include="Business\WebPage.cs" />
+    <Compile Include="Configuration\AppConstants.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="dto\ActiveInsuranceCompanyDto.cs" />
+    <Compile Include="dto\CompanyDto.cs" />
+    <Compile Include="dto\CookieDto.cs" />
+    <Compile Include="dto\LicenceDto.cs" />
+    <Compile Include="dto\TestDto.cs" />
+    <Compile Include="dto\TokenDto.cs" />
+    <Compile Include="FiyatFSrgulamaFactory12\ConcreteFiyatSorgulaFactory.cs" />
+    <Compile Include="FiyatFSrgulamaFactory12\FiyatSorgulaFactory.cs" />
+    <Compile Include="FiyatFSrgulamaFactory12\Interface\IFiyatSorgu.cs" />
+    <Compile Include="FiyatFSrgulamaFactory12\QueueMessage.cs" />
+    <Compile Include="Forms\CompanyDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Constant\InsuranceConstants.cs" />
+    <Compile Include="Forms\fiyatBilgileriForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\fiyatBilgileriForm.Designer.cs">
+      <DependentUpon>fiyatBilgileriForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\hizliTeklifFormNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\hizliTeklifFormNew.Designer.cs">
+      <DependentUpon>hizliTeklifFormNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowtableRows.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowtableRows.Designer.cs">
+      <DependentUpon>lowtableRows.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTableUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTableUserControl.Designer.cs">
+      <DependentUpon>lowTableUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTeminatBilgileri.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTeminatBilgileri.Designer.cs">
+      <DependentUpon>lowTeminatBilgileri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTeminatBilgileriForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTeminatBilgileriForm.Designer.cs">
+      <DependentUpon>lowTeminatBilgileriForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\QueryRequestDto.cs" />
+    <Compile Include="Forms\TeminatBilgileriForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TeminatBilgileriForm.Designer.cs">
+      <DependentUpon>TeminatBilgileriForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserControls\tableRows.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\UserControls\tableRows.designer.cs">
+      <DependentUpon>tableRows.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserControls\tableUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\UserControls\tableUserControl.designer.cs">
+      <DependentUpon>tableUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserControls\teminatBilgileri.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\UserControls\teminatBilgileri.designer.cs">
+      <DependentUpon>teminatBilgileri.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WaitForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WaitForm1.Designer.cs">
+      <DependentUpon>WaitForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\CustomLifeSpanHandler.cs" />
+    <Compile Include="Handler\CustomRequestHandler.cs" />
+    <Compile Include="Helpers\Class1.cs" />
+    <Compile Include="Helpers\CreateLoginScript.cs" />
+    <Compile Include="Helpers\CreateOtpScript.cs" />
+    <Compile Include="Helpers\CreateSmsScript.cs" />
+    <Compile Include="Helpers\ErrorLogger.cs" />
+    <Compile Include="Helpers\GlobalExceptionHandler.cs" />
+    <Compile Include="Helpers\ResourceManager.cs" />
+    <Compile Include="Helpers\SimpleCache.cs" />
+    <Compile Include="Helpers\SmsHelper.cs" />
+    <Compile Include="Helpers\TokenHelper.cs" />
+    <Compile Include="Helpers\TrafikFiyatSorgulamaFactory.cs" />
+    <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Info\AracSorguInfo.cs" />
+    <Compile Include="Info\InsuranceCompanyInfo.cs" />
+    <Compile Include="Info\OtpScriptInfo.cs" />
+    <Compile Include="Info\SmsScriptInfo.cs" />
+    <Compile Include="List\InsuranceCompanies.cs" />
+    <Compile Include="Map\InsuranceCompanyMap.cs" />
+    <Compile Include="Map\OtpScriptMappings.cs" />
+    <Compile Include="Map\SmsScriptMappings.cs" />
+    <Compile Include="Models\AktifKullaniciBilgileri.cs" />
+    <Compile Include="Models\Announcement.cs" />
+    <Compile Include="Models\ApiTools.cs" />
+    <Compile Include="Models\AracCinsi.cs" />
+    <Compile Include="Models\aracsorgu.cs" />
+    <Compile Include="Models\aracTip.cs" />
+    <Compile Include="Models\AuthRequest.cs" />
+    <Compile Include="Models\AuthResponse.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\dal.cs" />
+    <Compile Include="Models\DtarihGetir.cs" />
+    <Compile Include="Models\DtarihGetirRequest.cs" />
+    <Compile Include="Models\FirmaSessionBilgileri.cs" />
+    <Compile Include="Models\Firmaİsimleri.cs" />
+    <Compile Include="Models\fiyatBilgileri.cs" />
+    <Compile Include="Models\FiyatBilgisi.cs" />
+    <Compile Include="Models\getAracTipList.cs" />
+    <Compile Include="Models\GetLoginRequest.cs" />
+    <Compile Include="Models\grisigorta.cs" />
+    <Compile Include="Models\InsuranceCompany.cs" />
+    <Compile Include="Models\InsuranceCompanyResponse.cs" />
+    <Compile Include="Models\KullaniciBilgileri.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\LoginControlPageList.cs" />
+    <Compile Include="Models\LoginDto.cs" />
+    <Compile Include="Models\LoginScriptInfo.cs" />
+    <Compile Include="Models\OncekiPolice.cs" />
+    <Compile Include="Models\PriceCalculationParams.cs" />
+    <Compile Include="Models\Querry.cs" />
+    <Compile Include="Models\QuerryItems.cs" />
+    <Compile Include="Models\ReadResponse.cs" />
+    <Compile Include="Models\sorgu.cs" />
+    <Compile Include="Models\TableReturn.cs" />
+    <Compile Include="Models\Teminatlar\AcnTurkSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\AkSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\AllianzTeminat.cs" />
+    <Compile Include="Models\Teminatlar\AnadoluSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\AnaSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\AnkaraSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\AveonSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\BereketSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\CorpusTeminat.cs" />
+    <Compile Include="Models\Teminatlar\DogaSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\GriSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\HdiSigortaTeminat.cs" />
+    <Compile Include="Models\Teminatlar\KoruSigortaTeminat.cs" />
+    <Compile Include="Models\türkiyesigorta.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Querry\DogaSigortaQuerry.cs" />
+    <Compile Include="Querry\GriSigortaQuery.cs" />
+    <Compile Include="Querry\InsuranceData.cs" />
+    <Compile Include="Querry\Kasko\DogaSigortaKasko.cs" />
+    <Compile Include="Querry\KoruSigortaQuerry.cs" />
+    <Compile Include="Querry\Trafik\AllianzSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\AnkaraSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\BereketSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\CorpusSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\HdiSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\HepiyiSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\NeovaSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\RaySigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\DogaSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\KoruSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\QuickSigorta.cs" />
+    <Compile Include="Querry\Trafik\SekerSigortaTrafik.cs" />
+    <Compile Include="Querry\Trafik\SompoJapanSigortaTrafik.cs" />
+    <Compile Include="Servicess\IServiceContainer.cs" />
+    <Compile Include="Servicess\SimpleServiceContainer.cs" />
+    <Compile Include="Utility\ApiClient.cs" />
+    <Compile Include="Utility\CookieVisitor.cs" />
+    <Compile Include="Utility\DownloadHandler.cs" />
+    <Compile Include="Utility\LicenceManager.cs" />
+    <Compile Include="Utility\RequestHandler.cs" />
+    <Compile Include="Utility\ScheduledJobs\ActivePageReloaderJob.cs" />
+    <Compile Include="Utility\ScheduledJobs\JobScheduler.cs" />
+    <Compile Include="Utility\StaticMethods.cs" />
+    <EmbeddedResource Include="Forms\fiyatBilgileriForm.resx">
+      <DependentUpon>fiyatBilgileriForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\hizliTeklifFormNew.resx">
+      <DependentUpon>hizliTeklifFormNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowtableRows.resx">
+      <DependentUpon>lowtableRows.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTableUserControl.resx">
+      <DependentUpon>lowTableUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTeminatBilgileri.resx">
+      <DependentUpon>lowTeminatBilgileri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\lowresolutionforms\TeminatBilgileriForm\lowTeminatBilgileriForm.resx">
+      <DependentUpon>lowTeminatBilgileriForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TeminatBilgileriForm.resx">
+      <DependentUpon>TeminatBilgileriForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserControls\tableRows.resx">
+      <DependentUpon>tableRows.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserControls\tableUserControl.resx">
+      <DependentUpon>tableUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserControls\teminatBilgileri.resx">
+      <DependentUpon>teminatBilgileri.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WaitForm1.resx">
+      <DependentUpon>WaitForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Forms\Controls\ProgressBarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Company\CompanySearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Company\CompanyDetailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Price\PriceInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Price\PriceResultForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\1484.gif" />
+    <Content Include="resources\actions_envelopeclose.svg" />
+    <Content Include="resources\add_new_16px.png" />
+    <Content Include="resources\add_new_32px.png" />
+    <Content Include="resources\allowuserstoeditranges.svg" />
+    <Content Include="resources\apply_16x16.png" />
+    <Content Include="resources\automaticupdates.svg" />
+    <Content Include="resources\bocontact2_16x16.png" />
+    <Content Include="resources\bocontact2_32x32.png" />
+    <Content Include="resources\bopivotchart_32x32.png" />
+    <Content Include="resources\boposition2_32x32.png" />
+    <Content Include="resources\bouser_32x32.png" />
+    <Content Include="resources\bo_address.svg" />
+    <Content Include="resources\bo_contact.svg" />
+    <Content Include="resources\bo_department.svg" />
+    <Content Include="resources\bo_localization.svg" />
+    <Content Include="resources\bo_notifications.svg" />
+    <Content Include="resources\bo_organization.svg" />
+    <Content Include="resources\bo_position.svg" />
+    <Content Include="resources\bo_scheduler.svg" />
+    <Content Include="resources\bo_user.svg" />
+    <Content Include="resources\bo_vendor.svg" />
+    <Content Include="resources\broom_32px.png" />
+    <Content Include="resources\charttype_rangebar.svg" />
+    <Content Include="resources\clearheaderandfooter.svg" />
+    <Content Include="resources\cleartablestyle_32x32.png" />
+    <Content Include="resources\close_26px.png" />
+    <Content Include="resources\company_22px.png" />
+    <Content Include="resources\company_30px.png" />
+    <Content Include="resources\convertto.svg" />
+    <Content Include="resources\convert_16x16.png" />
+    <Content Include="resources\convert_16x161.png" />
+    <Content Include="resources\customfilter.svg" />
+    <Content Include="resources\del.svg" />
+    <Content Include="resources\delete_32px.png" />
+    <Content Include="resources\doublefirst.svg" />
+    <Content Include="resources\download_16x16.png" />
+    <Content Include="resources\driving.svg" />
+    <Content Include="resources\employeequickprobationnotice.svg" />
+    <Content Include="resources\exporttopdf_32x32.png" />
+    <Content Include="resources\functionsweb.svg" />
+    <Content Include="resources\general_32x32.png" />
+    <Content Include="resources\globe_32px.png" />
+    <Content Include="resources\groupbyresource.svg" />
+    <Content Include="resources\icons8_password_32.png" />
+    <Content Include="resources\icons8_User_Menu_Female_32.png" />
+    <Content Include="resources\info_32px.png" />
+    <Content Include="resources\insertlist.svg" />
+    <Content Include="resources\loader.gif" />
+    <Content Include="resources\Loading_100px.png" />
+    <Content Include="resources\logo.jpg" />
+    <Content Include="resources\morefunctions_32x32.png" />
+    <Content Include="resources\moveup.svg" />
+    <Content Include="resources\next.svg" />
+    <Content Include="resources\next1.svg" />
+    <Content Include="resources\officeslim.svg" />
+    <Content Include="resources\Old Live Journal logo_32px.png" />
+    <Content Include="resources\prev.svg" />
+    <Content Include="resources\Qr Code_32px.png" />
+    <Content Include="resources\reddatabarsolid.svg" />
+    <Content Include="resources\refreshallpivottable.svg" />
+    <Content Include="resources\refreshallpivottable_16x16.png" />
+    <Content Include="resources\refreshallpivottable_32x32.png" />
+    <Content Include="resources\refreshpivottable.svg" />
+    <Content Include="resources\reset2_16x16.png" />
+    <Content Include="resources\reset2_32x32.png" />
+    <Content Include="resources\saveas_32x32.png" />
+    <Content Include="resources\save_32px.png" />
+    <Content Include="resources\search_32px.png" />
+    <Content Include="resources\security_assistance.svg" />
+    <Content Include="resources\security_key.svg" />
+    <Content Include="resources\show_password_24px.png" />
+    <Content Include="resources\subtract_32px.png" />
+    <Content Include="resources\synchronize_32px.png" />
+    <Content Include="resources\task_32px.png" />
+    <Content Include="resources\text.svg" />
+    <Content Include="resources\traffic_jam_22px.png" />
+    <Content Include="resources\travel_car.svg" />
+    <Content Include="resources\travel_taxi.svg" />
+    <Content Include="resources\twopageview.svg" />
+    <Content Include="resources\update.svg" />
+    <Content Include="resources\Users_64px.png" />
+    <Content Include="resources\vehicle_insurance_22px.png" />
+    <Content Include="resource\Dropbox.Api.dll" />
+    <Content Include="resource\Newtonsoft.Json.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FiyatFSrgulamaFactory12\Concrete\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\chromiumembeddedframework.runtime.win-x64.135.0.22\build\chromiumembeddedframework.runtime.win-x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\chromiumembeddedframework.runtime.win-x64.135.0.22\build\chromiumembeddedframework.runtime.win-x64.props'))" />
+    <Error Condition="!Exists('..\packages\chromiumembeddedframework.runtime.win-x86.135.0.22\build\chromiumembeddedframework.runtime.win-x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\chromiumembeddedframework.runtime.win-x86.135.0.22\build\chromiumembeddedframework.runtime.win-x86.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.props'))" />
+    <Error Condition="!Exists('..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.targets'))" />
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\packages\Eto.Forms.2.8.3\build\Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Forms.2.8.3\build\Eto.Forms.targets'))" />
+  </Target>
+  <Import Project="..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.135.0.220\build\CefSharp.Common.targets')" />
+  <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Import Project="..\packages\Eto.Forms.2.8.3\build\Eto.Forms.targets" Condition="Exists('..\packages\Eto.Forms.2.8.3\build\Eto.Forms.targets')" />
+</Project>
