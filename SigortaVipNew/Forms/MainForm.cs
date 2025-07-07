@@ -52,6 +52,10 @@ namespace SigortaVipNew
         private NavBarGroup companiesGroup;
         private ResourceManager _resourceManager;
         private SimpleCache _cache;
+        private UserActivityTracker _activityTracker;
+        private BackgroundTaskManager _backgroundTaskManager;
+        private PerformanceMonitor _performanceMonitor;
+        private SimpleBrowserPool _browserPool;
 
 
 
@@ -72,8 +76,16 @@ namespace SigortaVipNew
                 InitializeComponent();
 
                 // Service container'dan servisleri al
+                _browserPool = new SimpleBrowserPool(3);
+                Console.WriteLine("✅ Browser Pool başlatıldı - ADIM 2.3");
                 _resourceManager = Program.ServiceContainer.Resolve<ResourceManager>();
                 _cache = Program.ServiceContainer.Resolve<SimpleCache>();
+                _backgroundTaskManager = Program.ServiceContainer.Resolve<BackgroundTaskManager>();
+                _performanceMonitor = Program.ServiceContainer.Resolve<PerformanceMonitor>();
+                _activityTracker = Program.ServiceContainer.Resolve<UserActivityTracker>();
+
+                // Form açılmasını track et
+                _activityTracker.TrackFormOpen("MainForm");
 
                 // Exception handling'i başlat
                 this.SetupExceptionHandling();
@@ -83,9 +95,9 @@ namespace SigortaVipNew
                 browserTabs = new Dictionary<string, ChromiumWebBrowser>();
 
                 // Config test logları
-                ErrorLogger.LogError($"Config Test - NavPaneWidth: {AppSettings.NavPaneWidth}");
-                ErrorLogger.LogError($"Config Test - DefaultPhone: {AppSettings.DefaultPhone}");
-                ErrorLogger.LogError($"Config Test - CompanyCacheMinutes: {AppSettings.CompanyCacheMinutes}");
+                AdvancedLogger.LogInfo($"Config Test - NavPaneWidth: {AppSettings.NavPaneWidth}", "Config");
+                AdvancedLogger.LogInfo($"Config Test - DefaultPhone: {AppSettings.DefaultPhone}", "Config");
+                AdvancedLogger.LogInfo($"Config Test - CompanyCacheMinutes: {AppSettings.CompanyCacheMinutes}", "Config");
 
                 // DI test kodu
                 try
@@ -93,17 +105,16 @@ namespace SigortaVipNew
                     var testValue = _cache.Get<string>("test_key");
                     if (testValue != null)
                     {
-                        ErrorLogger.LogError($"DI Cache Test Başarılı: {testValue}");
+                        AdvancedLogger.LogInfo($"DI Cache Test Başarılı: {testValue}", "DI");
                     }
                 }
                 catch (Exception ex)
                 {
-                    ErrorLogger.LogError(ex, "DI test hatası");
+                    AdvancedLogger.LogError(ex, "DI test hatası", "DI");
                 }
 
                 // Temalar ve görsel ayarlarını uygula
                 ApplyVisualStyle();
-
                 SetupUI();
                 SetupRibbonItems();
 
@@ -113,10 +124,12 @@ namespace SigortaVipNew
                 // Asenkron yükleme için Load eventını kullanın
                 this.Load += async (sender, e) => await LoadCompanies();
 
+                AdvancedLogger.LogInfo("MainForm başarıyla başlatıldı - DI sistemi aktif", "System");
                 ErrorLogger.LogError("MainForm başarıyla başlatıldı - DI sistemi aktif");
             }
             catch (Exception ex)
             {
+                AdvancedLogger.LogError(ex, "MainForm constructor hatası", "System");
                 ErrorLogger.LogError(ex, "MainForm constructor hatası");
                 MessageBox.Show($"Ana form başlatılamadı: {ex.Message}", "Kritik Hata",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -226,18 +239,29 @@ namespace SigortaVipNew
         {
             try
             {
+                AdvancedLogger.LogInfo("Şirket yükleme işlemi başlatıldı", "Companies");
+
                 ShowLoader(AppConstants.LoaderLoginMessage);
                 await LoginUserAsync();
+
                 UpdateLoader(AppConstants.LoaderCompaniesMessage);
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 insuranceCompanies = await GetInsuranceCompanies();
+                stopwatch.Stop();
+
+                AdvancedLogger.LogPerformance("GetInsuranceCompanies", stopwatch.Elapsed, "Companies");
+
                 UpdateLoader(AppConstants.LoaderUIMessage);
-                LoadCompaniesToNavBar(insuranceCompanies);  // Şimdi bu çalışacak
+                LoadCompaniesToNavBar(insuranceCompanies);
+
                 HideLoader();
+                AdvancedLogger.LogInfo($"Şirket yükleme tamamlandı. {insuranceCompanies?.Count ?? 0} şirket yüklendi", "Companies");
                 ErrorLogger.LogError(AppConstants.SuccessCompaniesLoaded);
             }
             catch (Exception ex)
             {
                 HideLoader();
+                AdvancedLogger.LogError(ex, "Şirket yükleme hatası", "Companies");
                 ErrorLogger.LogError(ex, "Şirketler yüklenirken hata");
                 MessageBox.Show($"Şirketler yüklenemedi: {ex.Message}", "Hata",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -276,6 +300,7 @@ namespace SigortaVipNew
                 ErrorLogger.LogError(ex, "Exception handling kurulum hatası");
             }
         }
+
 
         private void HandleException(Exception ex, string context = "")
         {
@@ -1433,7 +1458,9 @@ namespace SigortaVipNew
             {
                 // Resource manager temizliği
                 _resourceManager?.Dispose();
-
+                Console.WriteLine("🧹 Browser Pool temizleniyor - ADIM 2.4");
+                _browserPool?.Dispose();
+                Console.WriteLine("✅ Browser Pool temizlendi - ADIM 2.4");
                 // Tüm tarayıcıları temizle
                 foreach (var browser in browserTabs.Values)
                 {
@@ -2507,8 +2534,12 @@ namespace SigortaVipNew
 
         private async void simpleButton3_Click(object sender, EventArgs e)
         {
+            _activityTracker?.TrackButtonClick("FiyatSorgula", "MainForm");
+            AdvancedLogger.LogUserAction("Fiyat sorgulama butonu tıklandı", "", "PriceQuery");
+
             if (tabControl.SelectedTabPage == null)
             {
+                AdvancedLogger.LogWarning("Fiyat sorgulama için sekme seçilmedi", "PriceQuery");
                 MessageBox.Show("Lütfen bir sekme seçin.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -2516,6 +2547,7 @@ namespace SigortaVipNew
             // Ana sayfa kontrolü
             if (tabControl.SelectedTabPage == tabMainPage)
             {
+                AdvancedLogger.LogWarning("Ana sayfa için fiyat sorgulama denemesi", "PriceQuery");
                 MessageBox.Show("Ana sayfa için fiyat sorgulama yapılamaz.", "Bilgilendirme", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -2526,6 +2558,7 @@ namespace SigortaVipNew
 
             if (excludedTabs.Any(tab => selectedTabText.Contains(tab)))
             {
+                AdvancedLogger.LogWarning($"Desteklenmeyen sekme için fiyat sorgulama: {selectedTabText}", "PriceQuery");
                 MessageBox.Show("Bu sekme için fiyat sorgulama yapılamaz.", "Bilgilendirme", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -2536,12 +2569,15 @@ namespace SigortaVipNew
                 string tabKey = tabControl.SelectedTabPage.Tag?.ToString();
                 if (string.IsNullOrEmpty(tabKey))
                 {
+                    AdvancedLogger.LogError("Sekme bilgisi bulunamadı", "PriceQuery");
                     MessageBox.Show("Sekme bilgisi bulunamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 // Tab key'den şirket adını çıkar
                 string companyName = tabKey.StartsWith("tab_") ? tabKey.Substring(4) : selectedTabText;
+                AdvancedLogger.LogInfo($"Fiyat sorgulama başlatıldı: {companyName}", "PriceQuery");
+                _activityTracker?.TrackPriceQuery(companyName);
 
                 // Şirket bilgisini insurance companies'den al
                 var company = insuranceCompanies?.FirstOrDefault(x =>
@@ -2549,6 +2585,7 @@ namespace SigortaVipNew
 
                 if (company == null)
                 {
+                    AdvancedLogger.LogError($"Şirket bilgisi bulunamadı: {companyName}", "PriceQuery");
                     MessageBox.Show($"'{companyName}' şirketi için bilgi bulunamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -2562,6 +2599,7 @@ namespace SigortaVipNew
                     var supportedCompanies = TrafikFiyatSorgulamaFactory.GetSupportedCompanies();
                     var supportedList = string.Join("\n• ", supportedCompanies);
 
+                    AdvancedLogger.LogWarning($"Desteklenmeyen şirket: {companyName}", "PriceQuery");
                     MessageBox.Show($"'{companyName}' şirketi için fiyat sorgulama henüz desteklenmiyor.\n\n" +
                                   $"Desteklenen şirketler:\n• {supportedList}",
                                   "Desteklenmeyen Şirket", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2571,81 +2609,70 @@ namespace SigortaVipNew
                 // Seçili tab'dan browser'ı al
                 if (!browserTabs.ContainsKey(tabKey))
                 {
+                    AdvancedLogger.LogError($"Browser bilgisi bulunamadı: {tabKey}", "PriceQuery");
                     MessageBox.Show("Bu sekme için browser bilgisi bulunamadı.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 var browser = browserTabs[tabKey];
                 var musteriBilgileri = GetMusteriBilgileri();
-                string musteriOzeti = "";
+
                 if (musteriBilgileri != null)
                 {
-                    musteriOzeti = $"\n\nMüşteri: {musteriBilgileri.AdSoyad}" +
-                                  $"\nPlaka: {musteriBilgileri.txtPlakaNo}" +
-                                  $"\nTC: {musteriBilgileri.txtKimlikNo}";
+                    string musteriInfo = $"TC: {musteriBilgileri.txtKimlikNo?.Substring(0, 3)}***, Plaka: {musteriBilgileri.txtPlakaNo}";
+                    AdvancedLogger.LogInfo($"Müşteri bilgileri alındı: {musteriInfo}", "PriceQuery");
+                    _activityTracker?.TrackPriceQuery(companyName, musteriInfo);
                 }
 
-                MessageBox.Show($"Bu sekme için browser bilgisi bulunamadı.{musteriOzeti}",
-                                "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                // Test verileri
-                //var kullaniciBilgileri = new KullaniciBilgileri
-                //{
-                //    txtKimlikNo = "47371914826",
-                //    txtDogumTar = "25/02/1972",
-                //    txtPlakaNo = "34CPM586",
-                //    txtSeriNo = "HJ595778",
-                //    txtAracKodu = "0532250",
-                //    txtModel = "2020",
-                //    txtTel ="5523964131",
-                //    txtkullanımtarzı = "OTOMOBİL",
-                //    txtMarka = "FORD",
-                //    txtModelAdi = "",
-                //    txtYerAdedi = "4",
-                //};
                 var kullaniciBilgileri = musteriBilgileri;
-                // Butonu devre dışı bırak
-                //simpleButton3.Enabled = false;
-                //simpleButton3.Text = "Sorgulanıyor...";
 
                 // Progress göster
                 ShowLoader($"{companyName} fiyat sorgulanıyor...");
+                AdvancedLogger.LogInfo($"Fiyat sorgulama işlemi başlatıldı: {companyName}", "PriceQuery");
 
                 try
                 {
                     UpdateLoader($"{companyName} fiyat hesaplaması başlatılıyor...");
 
-                    // Dinamik olarak uygun fiyat sorgulama metodunu çağır
-                    var sonuc = await fiyatSorgu.TrafikSorgula(kullaniciBilgileri, browser);
+                    // Performance monitoring ile fiyat sorgulama - DÜZELTİLDİ
+                    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+                    var result = await fiyatSorgu.TrafikSorgula(kullaniciBilgileri, browser);
+                    stopwatch.Stop();
+
+                    // Performance logla
+                    AdvancedLogger.LogPerformance($"PriceQuery_{companyName}", stopwatch.Elapsed, "PriceQuery");
 
                     UpdateLoader("Fiyat sorgulama tamamlandı!");
                     await Task.Delay(1000);
 
                     // Sonucu göster
-                    if (sonuc.Durum == "Tamamlandı" || sonuc.Durum == "Başarılı")
+                    if (result.Durum == "Tamamlandı" || result.Durum == "Başarılı")
                     {
                         var message = $"{companyName} Fiyat Sorgulama Başarılı!\n\n" +
-                                      $"Brüt Prim: {sonuc.BrutPrim}\n" +
-                                      $"Komisyon: {sonuc.Komisyon}\n" +
-                                      $"Teklif No: {sonuc.TeklifNo}\n" +
-                                      $"Firma: {sonuc.FirmaAdi}";
+                                     $"Brüt Prim: {result.BrutPrim}\n" +
+                                     $"Komisyon: {result.Komisyon}\n" +
+                                     $"Teklif No: {result.TeklifNo}\n" +
+                                     $"Firma: {result.FirmaAdi}";
 
                         MessageBox.Show(message, "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                        AdvancedLogger.LogInfo($"Fiyat sorgulama başarılı: {companyName} - Prim: {result.BrutPrim}", "PriceQuery");
+                        _activityTracker?.TrackSystemEvent("PriceQuerySuccess", $"{companyName} - {result.BrutPrim}");
+
                         // Debug çıktısı
-                        Console.WriteLine($"=== {companyName.ToUpper()} SONUÇ ===");
-                        Console.WriteLine($"Brüt Prim: {sonuc.BrutPrim}");
-                        Console.WriteLine($"Komisyon: {sonuc.Komisyon}");
-                        Console.WriteLine($"Teklif No: {sonuc.TeklifNo}");
-                        Console.WriteLine($"Durum: {sonuc.Durum}");
-                        Console.WriteLine($"========================");
+                        AdvancedLogger.LogDebug($"=== {companyName.ToUpper()} SONUÇ ===", "PriceQuery");
+                        AdvancedLogger.LogDebug($"Brüt Prim: {result.BrutPrim}", "PriceQuery");
+                        AdvancedLogger.LogDebug($"Komisyon: {result.Komisyon}", "PriceQuery");
+                        AdvancedLogger.LogDebug($"Teklif No: {result.TeklifNo}", "PriceQuery");
+                        AdvancedLogger.LogDebug($"Durum: {result.Durum}", "PriceQuery");
                     }
                     else
                     {
-                        MessageBox.Show($"{companyName} Fiyat Sorgulama Başarısız!\n\nHata: {sonuc.Durum}",
+                        MessageBox.Show($"{companyName} Fiyat Sorgulama Başarısız!\n\nHata: {result.Durum}",
                                       "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                        Console.WriteLine($"{companyName} Hata: {sonuc.Durum}");
+                        AdvancedLogger.LogWarning($"Fiyat sorgulama başarısız: {companyName} - {result.Durum}", "PriceQuery");
+                        _activityTracker?.TrackError("PriceQueryFailed", $"{companyName} - {result.Durum}");
                     }
                 }
                 catch (Exception ex)
@@ -2656,7 +2683,8 @@ namespace SigortaVipNew
                     MessageBox.Show($"{companyName} fiyat sorgulama hatası:\n{ex.Message}",
                                   "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    Console.WriteLine($"{companyName} Exception: {ex.Message}");
+                    AdvancedLogger.LogError(ex, $"Fiyat sorgulama hatası: {companyName}", "PriceQuery");
+                    _activityTracker?.TrackError("PriceQueryException", $"{companyName} - {ex.Message}");
                 }
                 finally
                 {
@@ -2665,9 +2693,9 @@ namespace SigortaVipNew
             }
             catch (Exception ex)
             {
-                ErrorLogger.LogError(ex, "Fiyat sorgulama hatası");
+                AdvancedLogger.LogError(ex, "Fiyat sorgulama genel hatası", "PriceQuery");
+                _activityTracker?.TrackError("PriceQueryGeneralError", ex.Message);
                 MessageBox.Show($"Fiyat sorgulama işlemi başarısız.\nHata Detayı: {ex.Message}", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Console.WriteLine($"simpleButton3_Click Genel Hata: {ex.Message}"); ;
             }
             finally
             {
@@ -2676,14 +2704,16 @@ namespace SigortaVipNew
                 simpleButton3.Text = "Fiyat Sorgula";
 
                 // Güvenli şekilde loader'ı kapat
-                try { HideLoader(); } 
-               catch 
+                try
                 {
-                    ErrorLogger.LogError("Beklenmeyen hata oluştu");
+                    HideLoader();
+                }
+                catch (Exception ex)
+                {
+                    AdvancedLogger.LogError(ex, "Loader kapatma hatası", "UI");
                 }
             }
         }
-
     }
   
     // Basit ilerleme formu
@@ -2934,7 +2964,128 @@ namespace SigortaVipNew
     }
 
     // Fiyat sonuçlarını göstermek için yeni bir form
-   
+    // 🔧 ADIM 2: Bu minimal sınıfı MainForm.cs'in EN ALTINA ekleyin
+
+    /// <summary>
+    /// Browser havuzlama sistemi - En basit versiyon
+    /// </summary>
+    public class SimpleBrowserPool : IDisposable
+    {
+        private readonly Queue<ChromiumWebBrowser> _availableBrowsers;
+        private readonly Dictionary<string, ChromiumWebBrowser> _activeBrowsers;
+        private readonly int _maxPoolSize;
+        private bool _disposed = false;
+
+        public SimpleBrowserPool(int maxPoolSize = 3)
+        {
+            _maxPoolSize = maxPoolSize;
+            _availableBrowsers = new Queue<ChromiumWebBrowser>();
+            _activeBrowsers = new Dictionary<string, ChromiumWebBrowser>();
+
+            Console.WriteLine($"Browser Pool oluşturuldu - Max: {maxPoolSize}");
+        }
+
+        public ChromiumWebBrowser GetBrowser(string companyKey)
+        {
+            if (_disposed) throw new ObjectDisposedException(nameof(SimpleBrowserPool));
+
+            // Eğer bu şirket için zaten browser varsa
+            if (_activeBrowsers.ContainsKey(companyKey))
+            {
+                Console.WriteLine($"Mevcut browser kullanılıyor: {companyKey}");
+                return _activeBrowsers[companyKey];
+            }
+
+            ChromiumWebBrowser browser;
+
+            // Pool'dan browser al
+            if (_availableBrowsers.Count > 0)
+            {
+                browser = _availableBrowsers.Dequeue();
+                Console.WriteLine($"Pool'dan browser alındı: {companyKey}");
+            }
+            // Yeni browser oluştur
+            else if (_activeBrowsers.Count < _maxPoolSize)
+            {
+                browser = CreateBrowser();
+                Console.WriteLine($"Yeni browser oluşturuldu: {companyKey}");
+            }
+            // Limit doldu
+            else
+            {
+                Console.WriteLine($"Browser limiti doldu! Max: {_maxPoolSize}");
+                throw new InvalidOperationException("Browser pool kapasitesi dolu");
+            }
+
+            _activeBrowsers[companyKey] = browser;
+            return browser;
+        }
+
+        public void ReleaseBrowser(string companyKey)
+        {
+            if (_disposed) return;
+
+            if (_activeBrowsers.TryGetValue(companyKey, out var browser))
+            {
+                _activeBrowsers.Remove(companyKey);
+
+                // Browser'ı temizle
+                try
+                {
+                    if (browser != null && !browser.IsDisposed && browser.IsBrowserInitialized)
+                    {
+                        browser.LoadHtml("<html><body>Ready...</body></html>");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Browser temizleme hatası: {ex.Message}");
+                }
+
+                _availableBrowsers.Enqueue(browser);
+                Console.WriteLine($"Browser pool'a döndürüldü: {companyKey}");
+            }
+        }
+
+        private ChromiumWebBrowser CreateBrowser()
+        {
+            // En basit browser oluşturma
+            var browser = new ChromiumWebBrowser
+            {
+                Dock = DockStyle.Fill
+            };
+
+            return browser;
+        }
+
+        public void LogStatus()
+        {
+            Console.WriteLine($"Browser Pool - Aktif: {_activeBrowsers.Count}, Pool: {_availableBrowsers.Count}");
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                Console.WriteLine("Browser Pool temizleniyor...");
+
+                // Tüm browser'ları dispose et
+                foreach (var browser in _activeBrowsers.Values)
+                {
+                    try { browser?.Dispose(); } catch { }
+                }
+
+                while (_availableBrowsers.Count > 0)
+                {
+                    try { _availableBrowsers.Dequeue()?.Dispose(); } catch { }
+                }
+
+                _activeBrowsers.Clear();
+                _disposed = true;
+                Console.WriteLine("Browser Pool temizlendi");
+            }
+        }
+    }
 }
 
 public struct INTERNET_PROXY_INFO

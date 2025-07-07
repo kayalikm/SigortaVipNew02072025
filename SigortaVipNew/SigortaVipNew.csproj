@@ -265,17 +265,24 @@
     </Compile>
     <Compile Include="Handler\CustomLifeSpanHandler.cs" />
     <Compile Include="Handler\CustomRequestHandler.cs" />
+    <Compile Include="Helpers\AdvancedLogger.cs" />
+    <Compile Include="Helpers\BackgroundTaskManager.cs" />
+    <Compile Include="Helpers\CircuitBreaker.cs" />
     <Compile Include="Helpers\Class1.cs" />
     <Compile Include="Helpers\CreateLoginScript.cs" />
     <Compile Include="Helpers\CreateOtpScript.cs" />
     <Compile Include="Helpers\CreateSmsScript.cs" />
     <Compile Include="Helpers\ErrorLogger.cs" />
     <Compile Include="Helpers\GlobalExceptionHandler.cs" />
+    <Compile Include="Helpers\PerformanceMonitor.cs" />
     <Compile Include="Helpers\ResourceManager.cs" />
+    <Compile Include="Helpers\RetryHelper.cs" />
     <Compile Include="Helpers\SimpleCache.cs" />
     <Compile Include="Helpers\SmsHelper.cs" />
+    <Compile Include="Helpers\SystemHealth.cs" />
     <Compile Include="Helpers\TokenHelper.cs" />
     <Compile Include="Helpers\TrafikFiyatSorgulamaFactory.cs" />
+    <Compile Include="Helpers\UserActivityTracker.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="Info\AracSorguInfo.cs" />
     <Compile Include="Info\InsuranceCompanyInfo.cs" />
@@ -361,6 +368,8 @@
     <Compile Include="Querry\Trafik\SompoJapanSigortaTrafik.cs" />
     <Compile Include="Servicess\IServiceContainer.cs" />
     <Compile Include="Servicess\SimpleServiceContainer.cs" />
+    <Compile Include="ThreadManagement\BrowserLifecycleManager.cs" />
+    <Compile Include="ThreadManagement\ThreadMonitor.cs" />
     <Compile Include="Utility\ApiClient.cs" />
     <Compile Include="Utility\CookieVisitor.cs" />
     <Compile Include="Utility\DownloadHandler.cs" />
